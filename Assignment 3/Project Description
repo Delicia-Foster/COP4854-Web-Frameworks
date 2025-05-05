@@ -1,0 +1,80 @@
+Assignment 3 – TODO Backend Part 2
+	The goal of this assignment is to write the back end for a TODO App with the following API Spec as Defined in this Open API document:
+https://unfspring2025wfa3.azurewebsites.net/Links to an external site.
+
+The assignment must be written in Node / Express and TypeScript.
+All endpoints in the Open API Specification and related Schemas / Items must match the specification.
+
+All passwords must be hashed using BCrypt
+The Login endpoint must implement Basic Auth (email:password)
+All other endpoints which require authentication should implement Bearer Token JWT Authentication.
+Each Endpoint has a description which goes into detail as to what functionality is expected of that endpoint
+
+
+Criteria	
+
+This criterion is linked to a Learning OutcomeCreate User
+This endpoint creates a new user and returns the user object. It uses bcrypt to hash the password and checks to make sure the email is unique. If the email is not unique, it returns a 400 status code. If the email is unique, it returns the user object. All fields are required. Never return the password hash in the response.
+15 pts
+
+This criterion is linked to a Learning OutcomeLogin User
+This endpoint logs in a user and returns a JSON Web Token to be used for authentication.ItLinks to an external site. uses Basic Auth to send the username and password. If the username and password are correct, it returns a JSON Web Token. If not, it returns a 401 status code. Remember that the password is hashed so you must use bcrypt verify to check and see if the password provided matches the stored password
+20 pts
+
+This criterion is linked to a Learning OutcomePatch User
+This endpoint updates a user and returns the updated user object. It uses bcrypt to hash the password (if provided) and checks to make sure the email is unique. If the email is not unique, it returns a 400 status code. If the email is unique, it returns the user object. All fields are optional. Never return the password hash in the response.
+10 pts
+
+This criterion is linked to a Learning OutcomeCreate TODO List
+This middleware facilitates the creation of a new todo list, ensuring that only authenticated users can perform this action. Upon receiving a request, it first checks if the user has provided a title for the todo list, returning a 400 status code with a message indicating that the title is required if its missing. Once the titles presence is confirmed and the user(s) authentication status is verified through a valid JWT token, the middleware proceeds to create the todo list, optionally setting it as public based on the provided input. Successful creation of the list results in a 201 status code being sent back to the user, along with the details of the newly created todo list.
+20 pts
+
+This criterion is linked to a Learning OutcomeGet TODO Lists
+This middleware retrieves a collection of todo lists, adjusting visibility based on the user(s) authentication status. For unauthenticated users, it provides access to public todo lists, ensuring anyone can view lists intended for general visibility. Authenticated users, however, receive a more personalized set of lists, including those they own, public lists, and lists that have been shared with them. This differentiation ensures that users can access a wider range of lists based on their specific relationships to each list, whether through ownership or shared access. The process respects user privacy and data security, ensuring that only authorized users can see private and shared lists. Upon successful retrieval, the middleware sends back the lists with a 200 status code, indicating a successful operation.
+20 pts
+
+This criterion is linked to a Learning OutcomePatch TODO List
+This middleware updates a specific todo list identified by its ID. It starts by verifying the user(s) authorization, requiring that the user either owns the list or has been explicitly shared with it, and authentication is mandatory, indicated by a valid JWT token. If the todo list cannot be found in the database, it returns a 404 status code with a message indicating the list is not found. If the user attempting the update is not authorized, due to either not being the owner or not being among the shared users, the middleware responds with a 403 status code, signaling unauthorized access. The middleware also checks for the presence of required fields in the request body; specifically, either a title or a public visibility flag must be provided for the update to proceed. Absence of these fields results in a 400 status code response, indicating a bad request due to missing necessary information. Once these checks are passed, the todo list is updated with the new values provided in the request body, and a 204 status code is sent back, indicating that the update was successful without returning any content.
+25 pts
+
+This criterion is linked to a Learning OutcomeGET TODO List (By ID)
+This middleware retrieves a specific todo list by its ID and decides what information to return based on the user(s) authorization status. If the todo list does not exist, it sends a 404 error with a message indicating the list is not found. The middleware checks if the user is authorized to view the list by verifying if they are the creator, if the list is public, or if the user is explicitly shared with the list; unauthorized users receive a 401 error with an "Unauthorized" message. For authorized users, the middleware responds with the lists details, including ID, title, visibility, creators ID, creation date, and items. When the requester is the lists creator, additional details about the users with whom the list is shared are included; otherwise, this information is omitted to protect privacy. This ensures only authorized users can access sensitive information while providing comprehensive details to those permitted.
+15 pts
+
+This criterion is linked to a Learning OutcomeDelete TODO List
+This middleware facilitates the deletion of a todo list identified by its ID. Upon receiving a deletion request, it first verifies the users authorization, ensuring that only the lists owner can proceed with the deletion. Authentication is enforced through a valid JWT token. If the specified todo list is not found within the database, the middleware responds with a 404 status code and a message indicating the absence of the list. In situations where the user attempting the deletion does not match the lists owner, a 403 status code is returned, denoting unauthorized access. Only after passing these authorization and authentication checks does the middleware execute the deletion operation. Upon successful deletion of the todo list, a 204 status code is returned to the requester, signifying that the action was completed successfully without any content being sent back.
+15 pts
+
+This criterion is linked to a Learning OutcomeShare TODO List
+This middleware enables the sharing of a todo list with another user by verifying the requestors authorization and ensuring they are the lists owner. If the requestor is authenticated and owns the specified list, they must provide the email of the user they wish to share the list with. If the provided email is missing or the intended recipient user does not exist in the system, the middleware responds with a 400 or a 404 status code, respectively, to highlight the issue. Upon successful identification of both the todo list and the recipient user, the list is shared, and a 201 status code is returned, signifying the successful operation and sharing of the list.
+25 pts
+
+This criterion is linked to a Learning OutcomeDelete Share TODO List
+This middleware manages the removal of shared access to a todo list, either for a specific user identified by their email or for all users except the owner. It begins by confirming the requestors authority as the lists owner and the existence of the list in question. If the list cannot be found, it responds with a 404 status code, indicating the lists absence. When a specific shared user(s) email is provided, it looks for that user in the shared access list; if the user isnt found, it issues a 404 status code to denote the missing shared user. Authorized removal actions proceed based on the provided parameters: if an email is specified, it removes the sharing permissions for that particular user; if no email is provided, it clears the sharing permissions for all users, effectively privatizing the list. Successful removal of the shared access results in a 204 status code
+20 pts
+
+This criterion is linked to a Learning OutcomeCreate TODO List ITEM
+This middleware facilitates the creation of a new todo list item for a specified list identified by its ID. It begins by ensuring the user is authorized, requiring that the user be either the owner of the list or a shared user, with authentication validated through a valid JWT token. When the todo list is not found, a 404 status code is returned, indicating the absence of the list. If the user lacks authorization, a 403 status code is issued, signaling unauthorized access. The process mandates the presence of a task field in the request body; if missing, it triggers a 400 status code response highlighting the requirement. Upon meeting all prerequisites for authorization and data completeness, the middleware proceeds to create the new todo list item, incorporating any provided due date, marking it as not completed, and setting creation and update timestamps. Successful creation is acknowledged by returning a 201 status code alongside the details of the newly created todo list item.
+20 pts
+
+This criterion is linked to a Learning OutcomeGET TODO List Items
+This middleware retrieves todo items for a specific list identified by the provided list ID. It starts by checking if the user is authorized to access the list, considering the list owner, shared users, and public accessibility as criteria for authorization. Authentication is optional, but if the user is authenticated, private, public, or shared lists can be accessed; if not, only public lists are accessible. When the requested todo list is not found in the database, a 404 status code is returned with a message indicating the list was not found. If the user is not authorized to access the list—meaning they are neither the owner, a shared user, nor is the list public—a 403 status code is issued, indicating unauthorized access. Once authorization is confirmed, and the list is found, the middleware proceeds to fetch and return the list of todo items associated with the specified list ID, including details about the users who completed each item, if applicable. This successful retrieval is signaled by returning a 200 status code along with the list of items.
+15 pts
+
+This criterion is linked to a Learning OutcomePatch TODO list Item
+This middleware updates a specific todo list item, identified by both list and item IDs, ensuring that only authorized users can make changes. Authorization is strictly checked, requiring users to either own the list or be among its shared users, with a valid JWT token for authentication. If the todo list or the specific item doesnt exist, it returns a 404 status code, signaling "not found" for either case. Unauthorized attempts to update are blocked with a 403 status code. Before proceeding with updates, the middleware validates optional fields: it checks if the "completed" field is a boolean and if the "due_date" field is a valid ISO 8601 date string, returning a 400 status code for invalid inputs. Upon successful validation and authorization, it updates the todo list item with the provided details, including setting the "completed_by" and "completed_date" fields if the item is marked completed for the first time. A 204 status code is returned post-update, indicating the successful modification without sending any content back. This process ensures that modifications are securely applied, respecting the ownership and shared status of the todo list, while also validating input data to maintain consistency and accuracy.
+20 pts
+
+This criterion is linked to a Learning OutcomeGET TODO List Item (by ID)
+This middleware is designed to retrieve a specific todo list item, identified by both a list ID and an item ID. It first verifies the user(s) authorization, allowing only the lists owner, those with whom the list is shared, or if the list is public, to access the item. Authentication is optional but determines if private lists are accessible alongside public and shared ones. If the specified list is not found, a 404 status code is returned, indicating that no such list exists. Similarly, if the specific item within that list cannot be found, another 404 is issued, this time indicating the absence of the item. Unauthorized access attempts are blocked with a 403 status code, ensuring that only entitled users can view the item. Upon successful authorization and item location, the middleware returns the todo list item with a 200 status code, signifying a successful retrieval. This process ensures that data privacy is maintained while allowing authorized users to access specific todo list items.
+15 pts
+
+This criterion is linked to a Learning OutcomeDELETE TODO List Item
+This middleware executes the deletion of a specific todo list item identified by a unique combination of list ID and item ID. It begins by verifying the user(s) authorization to ensure that only the list owner or users with whom the list has been shared can perform the deletion. This authorization check is enforced through required authentication, validated by a valid JWT token. If the specified todo list or the targeted item does not exist, a 404 status code is returned to indicate their absence. Unauthorized attempts are blocked with a 403 status code to maintain the lists integrity and privacy. Once the user(s) authorization is confirmed and both the list and the item are located, the middleware proceeds to delete the item from the database. Successful deletion results in a 204 status code being returned, signaling the operations completion without providing any content, thus ensuring secure and controlled modification of the todo lists contents.
+20 pts
+
+This criterion is linked to a Learning OutcomeEXTRA CREDIT: USED a DATABASE FOR PERSISTANCE
+Used a Database (Any kind) for Persistance. Max 20pts
+0 pts
+
+Total Points: 275
