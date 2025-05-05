@@ -1,0 +1,20 @@
+Assignment 4 – Front end TODO List
+The back end must communicate with your backend from assignment 3 or / and my back end at: https://unfspring2025wfa3.azurewebsites.net/Links to an external site.
+
+Features:
+    1.	User Authentication: Design a login interface for user authentication that captures credentials and obtains a JWT. Implement functionality to store and use the JWT for authenticated API calls, as well as to logout.
+    2.	User Registration and Management: Allow users to register with a form collecting name, email, and password. Include the capability to update user details post-registration.
+    3.	Navigation Bar: Develop a top navigation bar with links such as Home, Login/Logout, Register, and My TODO Lists.
+    4.	TODO List Management: Create the ability to add new TODO lists with titles and public/private visibility. Provide options to view, edit, and delete lists. If a list is shared with you, you should be able to see this list also. Remember that you can have multiple to-do lists so you should be able to switch or select which list you want to see / work with. (Including public ones and ones shared with you)
+    5.	TODO Items Management: Users should be able to create, read, update, and delete TODO items, complete with due dates and completion status. (Including those lists items in lists that are shared with you)
+    6.	List Sharing: Add features to share lists with others via email and manage sharing permissions.
+    7.	Public Lists: If you are not logged in you should be able to see public lists and view its items and status
+
+Technical Requirements:
+    •	The application should be aestitically pleasing it doesn't have to be a master piece of design but put some effort in the look and feel and CSS. Feel free to use Angular Material Components or BootStrap to help with this.
+    •	Employ Reactive Forms for handling form inputs or two way binding ngModel.
+    •	Implement Angular Router to manage navigation and dynamic content display.
+    •	Use HTTPClient for making API requests.
+    •	Create Angular Services to encapsulate the business logic and API interactions.
+    •	Protect routes that require authentication with Route Guards.
+
