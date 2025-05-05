@@ -1,0 +1,79 @@
+Assignment 2 - TODO Backend Part 1
+	The goal of this assignment is to write the back end for a TODO App with the following API Spec as Defined in this Open API document: https://unfspring2025wf.azurewebsites.net/Links to an external site.
+
+The assignment must be written in Node / Express and TypeScript. All endpoints in the Open API Specification and related Schemas / Items must match the specification.
+ 
+* Note this is my implementation of this API and you are NOT Required to have a UI that looks like mine. All you are required to do is build the back end that responds to each of these requests in the same exact manner as mine works.
+
+Extra Credit:
+Write a basic HTML / CSS / JavaScript Interface that will let you interact with some of these endpoints. (Like I did above, but it doesn't have to be that fancy, nor does it have to include every endpoint)
+
+
+
+Criteria	
+
+This criterion is linked to a Learning OutcomeProgram Compiles Defect Free
+Application Compiles and is syntax defect free
+5 pts
+
+This criterion is linked to a Learning OutcomeWritten in TypeScript and Express
+API is written using TypeScript and Express
+5 pts
+
+This criterion is linked to a Learning OutcomeCreate Item List
+The endpoint should correctly process a JSON payload containing necessary fields, such as title, verifying the presence and correctness of these fields. If the request includes missing or invalid data, the endpoint must reject it with a relevant error message and a 400 status code. Upon receiving valid input, it should effectively create a new Todo List, assigning it a unique identifier and setting any other necessary attributes like creation timestamps. A 201 status code, indicating successful creation, should be returned along with the response body that includes details of the created Todo List, particularly the unique identifier and any default or initialized values.
+15 pts
+
+This criterion is linked to a Learning OutcomeRetrieve Item Lists
+For the GET /todo
+It must return a 200 status code along with a JSON payload containing an array of Todo Lists, each with detailed attributes such as ID, title, and creation date, when Todo Lists are present. In scenarios where no Todo Lists exist, the endpoint should still return a 200 status code, but with an empty array to signify the absence of data.
+5 pts
+
+This criterion is linked to a Learning OutcomeRetrieve List (by ID)
+For the GET /todo/{list_id}
+Retrieves a specific Todo List identified by its unique list_id. Upon receiving a valid list_id, the endpoint should return a 200 status code accompanied by a JSON payload containing the details of the requested Todo List, including attributes such as ID, title, creation date, and list items. If the specified list_id does not correspond to an existing Todo List, the endpoint is expected to return a 404 status code with a message indicating that the Todo List was not found.
+10 pts
+
+This criterion is linked to a Learning OutcomeUpdate List by ID
+For the PATCH /todo/{list_id}
+When provided with a valid list_id and a JSON payload containing the fields to be updated (e.g., title), the endpoint must successfully apply the updates and return a 204 status code indicating that the update has been processed without returning any content. If the list_id does not match any existing Todo List, the endpoint is expected to return a 404 status code, signaling that the specified Todo List could not be found. Additionally, if the request body does not meet the expected format or misses required fields, a 400 status code should be returned, along with a descriptive error message explaining the validation failure.
+20 pts
+
+This criterion is linked to a Learning OutcomeDelete List by ID
+For the DELETE /todo/{list_id}
+Upon receiving a valid list_id, the endpoint should successfully remove the specified Todo List and return a 204 status code, indicating that the deletion has been processed and there is no content to return. If the list_id does not match any existing Todo List, the endpoint is expected to return a 404 status code, with a message indicating that the Todo List could not be found, signaling to the client that no deletion was performed because the specified resource does not exist.
+15 pts
+
+This criterion is linked to a Learning OutcomeCreate List Item
+For the POST /todo/{list_id}/item
+Upon receiving a valid list_id and a JSON payload with necessary item details (e.g., task, completed status), the endpoint should validate the presence and correctness of the input, create the new item within the specified Todo List, and return a 201 status code along with a JSON payload of the created item, including its unique identifier and provided details. If the list_id does not correspond to any existing Todo List, the endpoint is expected to return a 404 status code, indicating that the specified Todo List could not be found. Furthermore, if the request body is missing required fields or contains invalid data, a 400 status code should be returned with a descriptive error message highlighting the validation issue.
+25 pts
+
+This criterion is linked to a Learning OutcomeRetrieve a List's Items
+For the GET /todo/{list_id}/items
+When provided with a valid list_id, the endpoint must return a 200 status code along with a JSON payload that includes an array of items associated with the Todo List, detailing attributes such as item ID, task description, completion status, and timestamps for creation and last update. If the specified list_id does not match any existing Todo List, the endpoint should return a 404 status code, indicating the absence of the Todo List and, by extension, any items.
+20 pts
+
+This criterion is linked to a Learning OutcomeRetrieve Individual Item from List by ID
+Upon receiving valid list_id and item_id parameters, the endpoint should return a 200 status code accompanied by a JSON payload detailing the requested item, including its ID, task description, completion status, and creation and update timestamps. If the list_id does not correspond to an existing Todo List or the item_id does not exist within that list, the endpoint is expected to return a 404 status code, with a message indicating that the specified item could not be found within the given Todo List or that the list itself could not be found.
+25 pts
+
+This criterion is linked to a Learning OutcomeUpdate Item in a List by ID
+For the PATCH /todo/{list_id}/item/{item_id} endpoint
+The endpoint must validate the existence of both the Todo List and the specified item within that list. Upon receiving valid identifiers (list_id and item_id) and a JSON payload with the item's updated details (such as task description or completion status), the endpoint should apply the updates and return a 204 status code, indicating that the update has been successfully processed without any content being returned. If either the list_id does not match any existing Todo List or the item_id does not exist within the specified list, the endpoint is expected to return a 404 status code, accompanied by a message indicating that the specified list or item could not be found.
+25 pts
+
+This criterion is linked to a Learning OutcomeDelete Item in a List by ID
+For the DELETE /todo/{list_id}/item/{item_id}
+Upon receiving valid list_id and item_id parameters, the endpoint must verify the existence of the specified Todo List and the specific item within it. If both the list and the item exist, the endpoint should proceed to delete the item and return a 204 status code, indicating that the deletion has been processed successfully without any content to return. In cases where either the specified Todo List does not exist or the item_id cannot be found within the list, the endpoint is expected to return a 404 status code, with a message indicating that the specified item or list could not be found. This ensures the DELETE
+25 pts
+
+This criterion is linked to a Learning OutcomeThe Data Models Comply with Spec
+When returning Objects the Data Models should comply with those on the spec.
+25 pts
+
+This criterion is linked to a Learning OutcomeExtra Credit
+UX for some of the functionality was created (20pts Max)
+0 pts
+
+Total Points: 220
